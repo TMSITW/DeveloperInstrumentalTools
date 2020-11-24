@@ -19,6 +19,84 @@ namespace Database.EFCore.Migrations
                 .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            modelBuilder.Entity("Database.EFCore.Entities.CurrencyEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Currency");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "RUB"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "EUR"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "USD"
+                        });
+                });
+
+            modelBuilder.Entity("Database.EFCore.Entities.ExchangeRateEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("CurrencyId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("Rate");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CurrencyId = 1,
+                            Date = new DateTime(2020, 11, 24, 15, 5, 45, 0, DateTimeKind.Unspecified),
+                            Value = 1.0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CurrencyId = 2,
+                            Date = new DateTime(2020, 11, 24, 16, 10, 34, 0, DateTimeKind.Unspecified),
+                            Value = 95.0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CurrencyId = 3,
+                            Date = new DateTime(2020, 11, 24, 16, 10, 35, 0, DateTimeKind.Unspecified),
+                            Value = 80.0
+                        });
+                });
+
             modelBuilder.Entity("Database.EFCore.Entities.SummaryEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -130,6 +208,13 @@ namespace Database.EFCore.Migrations
                             Temperature = -10m,
                             TimeStamp = new DateTime(2020, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
+                });
+
+            modelBuilder.Entity("Database.EFCore.Entities.ExchangeRateEntity", b =>
+                {
+                    b.HasOne("Database.EFCore.Entities.CurrencyEntity", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId");
                 });
 
             modelBuilder.Entity("Database.EFCore.Entities.WeatherEntity", b =>

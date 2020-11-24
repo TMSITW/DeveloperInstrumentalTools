@@ -14,6 +14,11 @@ namespace WebApplication.EFCore
                 .ForMember(
                     dst => dst.TemperatureC,
                     opt => opt.MapFrom(src => src.Temperature));
+
+            this.CreateMap<ExchangeRateEntity, ExchangeRate>()
+                .ForMember(
+                    dst => dst.Currency,
+                    opt => opt.MapFrom(src => src.Currency.Name));
         }
     }
 }

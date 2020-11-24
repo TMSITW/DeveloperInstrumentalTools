@@ -11,6 +11,7 @@ ProjectSection(SolutionItems) = preProject
 	SQL\create-multiple-postgresql-databases.sh = SQL\create-multiple-postgresql-databases.sh
 	SQL\postgres.dockerfile = SQL\postgres.dockerfile
 	SQL\docker-compose.yml = SQL\docker-compose.yml
+	SQL\web.dockerfile = SQL\web.dockerfile
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database.EFCore", "SQL\Database.EFCore\Database.EFCore.csproj", "{5C8AAD80-17B4-4F2F-848B-12870392A368}"

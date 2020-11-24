@@ -10,6 +10,10 @@ namespace Database.EFCore
         public DbSet<SummaryEntity> Summaries { get; set; }
         public DbSet<WeatherEntity> Weathers { get; set; }
         
+        public DbSet<CurrencyEntity> Currencys { get; set; }
+        
+        public DbSet<ExchangeRateEntity> Rates { get; set; }
+        
         public ExampleContext()
         {
         }
@@ -23,7 +27,7 @@ namespace Database.EFCore
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;User ID=postgres;Password=root;");
+                optionsBuilder.UseNpgsql("Host=postgres;Port=5432;Database=postgres;User ID=postgres;Password=root;");
             }
         }
 
@@ -79,6 +83,49 @@ namespace Database.EFCore
                 TimeStamp = new DateTime(2020, 1, 3),
                 Temperature = -10m,
                 SummaryId = 1
+            });
+            
+            modelBuilder.Entity<ExchangeRateEntity>(entity =>
+            {
+                entity.ToTable("Rate");
+                entity.HasKey(x => x.Id);
+                entity.Property(x => x.Id).UseIdentityColumn();
+                entity.HasOne(d => d.Currency);
+            });
+            
+            modelBuilder.Entity<CurrencyEntity>(entity =>
+            {
+                entity.ToTable("Currency");
+                entity.HasKey(x => x.Id);
+                entity.Property(x => x.Id).UseIdentityColumn();
+            });
+            
+            modelBuilder.Entity<CurrencyEntity>().HasData(new CurrencyEntity() { Id = 1, Name = "RUB" });
+            modelBuilder.Entity<CurrencyEntity>().HasData(new CurrencyEntity() { Id = 2, Name = "EUR" });
+            modelBuilder.Entity<CurrencyEntity>().HasData(new CurrencyEntity() { Id = 3, Name = "USD" });
+            
+            modelBuilder.Entity<ExchangeRateEntity>().HasData(new
+            {
+                Id = 1, 
+                CurrencyId = 1,
+                Date = new DateTime(2020, 11, 24, 15, 05, 45, 0, DateTimeKind.Unspecified),
+                Value = 1.0
+            });
+            
+            modelBuilder.Entity<ExchangeRateEntity>().HasData(new
+            {
+                Id = 2, 
+                CurrencyId = 2,
+                Date = new DateTime(2020, 11, 24, 16, 10, 34, 0, DateTimeKind.Unspecified),
+                Value = 95.0
+            });
+            
+            modelBuilder.Entity<ExchangeRateEntity>().HasData(new
+            {
+                Id = 3, 
+                CurrencyId = 3,
+                Date = new DateTime(2020, 11, 24, 16, 10, 35, 0, DateTimeKind.Unspecified),
+                Value = 80.0
             });
             
             //modelBuilder.Entity<WeatherEntity>().OwnsOne(p => p.Summary).HasData(new { Date = new DateTime(2020, 1, 1), Temperature = -1, Code = "Chill" });
